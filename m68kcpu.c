@@ -961,6 +961,10 @@ int m68k_execute(int num_cycles)
 	/* See if interrupts came in */
 	m68ki_check_interrupts();
 
+  if (CPU_STOPPED) {
+    return -1;
+  }
+
 	/* Make sure we're not stopped */
 	if(!CPU_STOPPED)
 	{
