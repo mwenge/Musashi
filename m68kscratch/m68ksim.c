@@ -506,14 +506,12 @@ void printZeroPage() {
   unsigned slots_per_line = 0x10 * 4;
   for(unsigned i=0; i<slots_per_line; ++i) {
     printf("%04X ", i*slots_per_line);
-    for(unsigned a=i*slots_per_line; a<(i*slots_per_line)+slots_per_line; ++a) {
-      if (a % 4 == 0) {
-        printf("|");
-      }
-      if (g_ram[a]) {
-        printf("%02X", g_ram[a]);
+    for(unsigned a=i*slots_per_line; a<(i*slots_per_line)+slots_per_line; a+=4) {
+      printf("|");
+      if (g_ram[a] || g_ram[a+1] || g_ram[a+2] || g_ram[a+3]) {
+        printf("%02X%02X%02X%02X", g_ram[a], g_ram[a+1], g_ram[a+2], g_ram[a+3]);
       } else {
-        printf("  ");
+        printf("        ");
       }
     }
     printf("|\n");
