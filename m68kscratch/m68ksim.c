@@ -21,7 +21,7 @@ void disassemble_program(void);
 
 /* ROM and RAM sizes */
 #define MAX_ROM 0xfff
-#define MAX_RAM 0xff
+#define MAX_RAM 0xffff
 
 
 /* Read/write macros */
@@ -499,17 +499,24 @@ void cpu_instr_callback(int pc)
 void printZeroPage() {
   printf(
       "                                                       \n"
-      "First 256 Bytes of RAM After Execution Completed \n"
+      "RAM After Execution Completed \n"
       "                                                       \n"
-      "    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F    \n"
-      "    -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --    \n"
       );
 
-  for(unsigned i=0; i<0x10; ++i) {
-    printf("%02X |", i);
-    for(unsigned a=i*0x10; a<(i*0x10)+0x10; ++a)
-      printf("%02X ", g_ram[a]);
-    printf("\n");
+  unsigned slots_per_line = 0x10 * 4;
+  for(unsigned i=0; i<slots_per_line; ++i) {
+    printf("%04X ", i*slots_per_line);
+    for(unsigned a=i*slots_per_line; a<(i*slots_per_line)+slots_per_line; ++a) {
+      if (a % 4 == 0) {
+        printf("|");
+      }
+      if (g_ram[a]) {
+        printf("%02X", g_ram[a]);
+      } else {
+        printf("  ");
+      }
+    }
+    printf("|\n");
   }
 }
 
