@@ -485,7 +485,12 @@ void cpu_instr_callback(int pc)
 
 	printf("E %03x: %-20s: %-24s ", pc, buff2, buff);
   for(int i=0;i<16;i++) {
-	  printf("%08x ", m68k_get_reg(NULL, i));
+	  int value = m68k_get_reg(NULL, i);
+    if (value) {
+      printf("%08x ", value);
+    } else {
+      printf("%*s", 9, "");
+    }
   }
   printf("\n");
 	fflush(stdout);
